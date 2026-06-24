@@ -1,0 +1,15 @@
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  overflow-x: hidden; /* Sprečava pojavu donjeg skrola */
+}
+
+#root {
+  width: 100%;
+}

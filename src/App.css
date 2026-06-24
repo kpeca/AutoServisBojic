@@ -1,0 +1,1653 @@
+/* 1. Globalni Reset */
+
+:root {
+  --brand-red: #e74c3c;
+  --brand-red-dark: #c0392b;
+  --brand-blue: #2436c7;
+  --brand-blue-light: #4254e0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  width: 100%;
+  overflow-x: clip; /* clip seče horizontalni preliv bez stvaranja druge vertikalne trake */
+  font-family: "Segoe UI", Roboto, sans-serif;
+  scroll-behavior: smooth; /* Smooth (gladak) prelaz pri kliku na meni/dugmad */
+}
+
+/* Sekcije se zaustavljaju ispod fiksnog navbara (60px), ne ispod njega */
+section[id],
+[id="contact"] {
+  scroll-margin-top: 70px;
+}
+
+section {
+  padding: 60px 0;
+}
+
+/* Poštuj korisnike koji ne žele animacije */
+@media (prefers-reduced-motion: reduce) {
+  body,
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* 2. Navbar */
+.navbar {
+  width: 100%;
+  height: 60px;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #e74c3c;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 42px;
+  width: auto;
+  display: block;
+}
+
+.logo-text {
+  color: #e74c3c;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  list-style: none; /* Sklanja tačkice */
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #e74c3c;
+}
+
+/* Dodatni sadržaj menija (CTA, kontakt, mreže, zupčanik) - skriven na desktopu */
+.nav-extra,
+.nav-menu-gear {
+  display: none;
+}
+
+/* 3. Hamburger Dugme - DESKTOP (Skriveno) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  cursor: pointer;
+  z-index: 2000;
+}
+
+.bar {
+  width: 100%;
+  height: 3px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+/* 4. Hero Sekcija - 3D mehanika scena */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(231, 76, 60, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(circle at 85% 80%, rgba(36, 54, 199, 0.2), transparent 50%),
+    linear-gradient(rgba(10, 10, 12, 0.82), rgba(10, 10, 12, 0.92)),
+    url("https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=2000");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
+/* Svetlosna aura iznad pozadine - crveno/plavi sjaj (boje logoa) */
+.hero::before {
+  content: "";
+  position: absolute;
+  bottom: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(
+    circle,
+    rgba(231, 76, 60, 0.25),
+    rgba(36, 54, 199, 0.12) 45%,
+    transparent 65%
+  );
+  filter: blur(40px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 3D scena sa zupčanicima */
+.hero-3d-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  perspective: 1000px;
+  pointer-events: none;
+}
+
+/* Perspektivni "tech" pod */
+.grid-floor {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 250%;
+  height: 60%;
+  transform: translateX(-50%) perspective(420px) rotateX(68deg);
+  transform-origin: bottom center;
+  background-image:
+    linear-gradient(to right, rgba(231, 76, 60, 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(231, 76, 60, 0.35) 1px, transparent 1px);
+  background-size: 45px 45px;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 85%);
+  mask-image: linear-gradient(to top, #000 0%, transparent 85%);
+  animation: gridMove 2.5s linear infinite;
+}
+
+@keyframes gridMove {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 45px;
+  }
+}
+
+/* Metalni zupčanici */
+.hero-gear {
+  position: absolute;
+  filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.65));
+  will-change: transform;
+}
+
+.gear-1 {
+  width: 340px;
+  height: 340px;
+  top: -70px;
+  right: -70px;
+  opacity: 0.9;
+  animation: spin 22s linear infinite;
+}
+
+.gear-2 {
+  width: 220px;
+  height: 220px;
+  bottom: 30px;
+  left: -55px;
+  opacity: 0.8;
+  animation: spinRev 16s linear infinite;
+}
+
+.gear-3 {
+  width: 150px;
+  height: 150px;
+  top: 22%;
+  right: 13%;
+  opacity: 0.5;
+  animation: spin 11s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinRev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* Sadržaj hero sekcije */
+.hero-inner {
+  position: relative;
+  z-index: 3;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: heroFadeUp 1s ease both;
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll reveal - sadržaj sekcija izlazi odozdo kada uđe u vidno polje */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Korisnici koji ne žele animacije - odmah prikaži */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.hero-badge {
+  display: inline-block;
+  margin-bottom: 24px;
+  padding: 9px 22px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ff6b5d;
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid rgba(231, 76, 60, 0.5);
+  border-radius: 50px;
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 0 25px rgba(231, 76, 60, 0.25),
+    0 0 35px rgba(36, 54, 199, 0.18);
+}
+
+.hero-inner h1 {
+  font-size: clamp(2.3rem, 5.5vw, 4.6rem);
+  line-height: 1.08;
+  font-weight: 900;
+  margin-bottom: 22px;
+  letter-spacing: -1px;
+  background: linear-gradient(180deg, #ffffff 45%, #b9bdc4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.hero-inner p {
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  max-width: 620px;
+  margin: 0 auto;
+  color: #cfd2d6;
+  line-height: 1.6;
+}
+
+/* Hero dugmad - 3D, taktilna */
+.hero-btns {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 38px;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 16px 40px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 10px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(135deg, #ff5a4d, #c0392b);
+  box-shadow:
+    0 7px 0 #7c241b,
+    0 16px 28px rgba(231, 76, 60, 0.45);
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 11px 0 #7c241b,
+    0 22px 34px rgba(231, 76, 60, 0.55);
+}
+
+.btn-primary:active {
+  transform: translateY(5px);
+  box-shadow:
+    0 2px 0 #7c241b,
+    0 6px 14px rgba(231, 76, 60, 0.4);
+}
+
+.btn-secondary {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-4px);
+  color: #ff6b5d;
+  border-color: #e74c3c;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.btn-secondary:active {
+  transform: translateY(2px);
+}
+
+/* Poštuj korisnike koji ne žele animacije */
+@media (prefers-reduced-motion: reduce) {
+  .hero-gear,
+  .grid-floor,
+  .hero-inner {
+    animation: none !important;
+  }
+}
+
+/* Manji zupčanici na mobilnom da ne smetaju tekstu */
+@media (max-width: 768px) {
+  .gear-1 {
+    width: 200px;
+    height: 200px;
+    top: -40px;
+    right: -50px;
+  }
+  .gear-2 {
+    width: 140px;
+    height: 140px;
+  }
+  .gear-3 {
+    display: none;
+  }
+}
+
+/* 5. Services Sekcija */
+.services {
+  width: 100%;
+  padding: 60px 0;
+  background: #ffffff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.card {
+  position: relative;
+  padding: 45px 35px;
+  background: linear-gradient(180deg, #ffffff, #f4f6f8);
+  border-radius: 14px;
+  text-align: center;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+  border: 1px solid #ececec;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+/* Akcent koji “izraste” na vrhu kartice - crveno/plavi gradijent (boje logoa) */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand-red), var(--brand-blue));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.14);
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+.card .icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 22px;
+  font-size: 2.6rem; /* VELIKE IKONICE */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1f2125, #2c2f34);
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.card:hover .icon {
+  transform: scale(1.08) rotate(6deg);
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.1),
+    0 12px 24px rgba(231, 76, 60, 0.4);
+}
+
+/* 6. Footer */
+.footer {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  padding: 50px 0 20px; /* Smanjen gornji padding sa 80px na 50px */
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  align-items: flex-start; /* Poravnava sve kolone po vrhu */
+  margin-bottom: 40px;
+}
+
+.footer-col h4 {
+  color: #e74c3c;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.footer-col p {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Stil za ikonice koji si tražio - u bojama i centrirano */
+.social-links {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-start;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  background: #222;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.social-icon.facebook:hover {
+  background: #1877f2;
+  transform: translateY(-3px);
+}
+.social-icon.instagram:hover {
+  background: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  );
+  transform: translateY(-3px);
+}
+
+/* Donji deo sa autorskim pravima */
+.footer-bottom {
+  border-top: 1px solid #222;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Responzivnost za mobilni - centriraj sve */
+@media (max-width: 768px) {
+  .footer-col {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .social-links {
+    justify-content: center;
+  }
+}
+
+/* 7. MOBILNA VERZIJA (Ispod 768px) */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex; /* PRIKAZUJE HAMBURGER */
+  }
+
+  /* Animacija u X kada je aktivan */
+  .bar-top.active {
+    transform: translateY(9px) rotate(45deg);
+  }
+  .bar-mid.active {
+    opacity: 0;
+  }
+  .bar-bot.active {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0; /* Od vrha do dna */
+    left: -100%;
+    width: 100%;
+    height: 100vh;
+    background:
+      radial-gradient(
+        circle at 80% 15%,
+        rgba(231, 76, 60, 0.14),
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 15% 90%,
+        rgba(36, 54, 199, 0.16),
+        transparent 50%
+      ),
+      #15171a;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.4s;
+    gap: 28px;
+    overflow: hidden;
+  }
+
+  .nav-links.active {
+    left: 0;
+  }
+
+  .nav-links a {
+    font-size: 1.5rem;
+  }
+
+  /* Stavke menija "uleću" jedna po jedna kada se otvori */
+  .nav-links li {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .nav-links.active li {
+    animation: navItemIn 0.5s ease forwards;
+  }
+
+  .nav-links.active li:nth-child(1) {
+    animation-delay: 0.12s;
+  }
+  .nav-links.active li:nth-child(2) {
+    animation-delay: 0.18s;
+  }
+  .nav-links.active li:nth-child(3) {
+    animation-delay: 0.24s;
+  }
+  .nav-links.active li:nth-child(4) {
+    animation-delay: 0.3s;
+  }
+  .nav-links.active li:nth-child(5) {
+    animation-delay: 0.36s;
+  }
+  .nav-links.active li:nth-child(6) {
+    animation-delay: 0.42s;
+  }
+  .nav-links.active li:nth-child(7) {
+    animation-delay: 0.52s;
+  }
+  .nav-links.active li:nth-child(8) {
+    animation-delay: 0.6s;
+  }
+  .nav-links.active li:nth-child(9) {
+    animation-delay: 0.68s;
+  }
+
+  @keyframes navItemIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Dodatni sadržaj vidljiv u mobilnom meniju */
+  .nav-extra {
+    display: flex;
+    z-index: 2;
+  }
+
+  /* CTA dugme u meniju */
+  .nav-cta {
+    margin-top: 8px;
+    padding: 14px 36px;
+    font-size: 1rem !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff !important;
+    background: linear-gradient(135deg, #ff5a4d, #c0392b);
+    border-radius: 10px;
+    box-shadow:
+      0 6px 0 #7c241b,
+      0 14px 24px rgba(231, 76, 60, 0.4);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .nav-cta:active {
+    transform: translateY(4px);
+    box-shadow:
+      0 2px 0 #7c241b,
+      0 6px 12px rgba(231, 76, 60, 0.4);
+  }
+
+  /* Kontakt info u meniju */
+  .nav-contact-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 26px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    width: 80%;
+    max-width: 320px;
+  }
+
+  .nav-contact-info a,
+  .nav-contact-info span {
+    font-size: 1rem !important;
+    color: #c7cace !important;
+    font-weight: 500;
+  }
+
+  .nav-contact-info a:hover {
+    color: #e74c3c !important;
+  }
+
+  /* Društvene mreže u meniju */
+  .nav-social {
+    flex-direction: row;
+    gap: 18px;
+    margin-top: 6px;
+  }
+
+  .nav-social a {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.2rem !important;
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition:
+      transform 0.25s ease,
+      background 0.3s ease;
+  }
+
+  .nav-social a:nth-child(1):hover {
+    background: #1877f2;
+    transform: translateY(-4px) scale(1.05);
+  }
+
+  .nav-social a:nth-child(2):hover {
+    background: radial-gradient(
+      circle at 30% 107%,
+      #fdf497 0%,
+      #fd5949 45%,
+      #d6249f 60%,
+      #285aeb 90%
+    );
+    transform: translateY(-4px) scale(1.05);
+  }
+
+  /* Dekorativni zupčanik u pozadini menija */
+  .nav-menu-gear {
+    display: block;
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    bottom: -90px;
+    right: -90px;
+    opacity: 0.06;
+    filter: grayscale(1) brightness(2.4);
+    z-index: 0;
+    pointer-events: none;
+    animation: spin 28s linear infinite;
+  }
+
+  .grid {
+    grid-template-columns: 1fr; /* Jedna kolona na mobilnom */
+  }
+}
+
+.section-title {
+  font-size: clamp(
+    1.7rem,
+    1vw,
+    1rem
+  ); /* Responzivan font: min 2rem, raste do 3rem */
+  text-align: center; /* Centriranje teksta */
+  margin-bottom: 60px; /* Više prostora ispod naslova */
+  text-transform: uppercase; /* Velika slova za autoritativniji izgled */
+  font-weight: 800;
+  color: #1a1a1a;
+  position: relative; /* Potrebno za ukrasnu liniju */
+  padding-bottom: 15px;
+}
+
+/* Ukrasna linija ispod naslova - crveno/plavi gradijent (boje logoa) */
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%); /* Savršeno centriranje linije */
+  width: 80px; /* Širina linije */
+  height: 4px; /* Debljina linije */
+  background: linear-gradient(
+    90deg,
+    var(--brand-red),
+    var(--brand-blue)
+  ); /* Brend boje sa logoa */
+  border-radius: 2px;
+}
+
+/* SWIPER */
+
+.gallery-section {
+  background: #ffffff;
+}
+
+.mySwiper {
+  padding: 40px 0 !important; /* Prostor za pagination tačkice */
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover; /* Ovo sprečava deformaciju slika */
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Boja za strelice i tačkice da se slaže sa Auto Servis Bojić crvenom */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #e74c3c;
+}
+
+.swiper-pagination-bullet-active {
+  background: #e74c3c !important;
+}
+
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000; /* Mora biti iznad svega */
+  cursor: zoom-out;
+}
+
+.lightbox-img {
+  max-width: 90%;
+  max-height: 80%;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  animation: zoomIn 0.3s ease;
+}
+
+.close-lightbox {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  color: white;
+  font-size: 50px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.social-links {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%; /* Okrugle ikonice */
+  background: #333; /* Podrazumevana tamna pozadina */
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Boja za Facebook */
+.social-icon.facebook:hover {
+  background-color: #1877f2;
+  transform: translateY(-5px);
+}
+
+/* Boja za Instagram (gradijent efekat) */
+.social-icon.instagram:hover {
+  background: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  );
+  transform: translateY(-5px);
+}
+
+/* Partneri sekcija*/
+
+.partners-section {
+  padding: 70px 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(231, 76, 60, 0.05), transparent 60%),
+    linear-gradient(180deg, #eef1f4, #e3e7ec);
+  border-top: 1px solid #d9dde2;
+  border-bottom: 1px solid #d9dde2;
+}
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 kolona na desktopu */
+  gap: 40px;
+  align-items: center;
+  justify-items: center;
+}
+
+.partner-logo {
+  width: 100%;
+  max-width: 150px; /* Ograničavamo širinu logoa */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 22px 18px;
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.partner-logo:hover {
+  transform: translateY(-8px);
+  border-color: rgba(231, 76, 60, 0.5);
+  box-shadow: 0 16px 32px rgba(231, 76, 60, 0.18);
+}
+
+/* Svaki drugi logo na hover dobija plavi akcent (boje logoa) */
+.partner-logo:nth-child(even):hover {
+  border-color: rgba(36, 54, 199, 0.5);
+  box-shadow: 0 16px 32px rgba(36, 54, 199, 0.18);
+}
+
+.partner-logo img {
+  width: 100%;
+  height: auto;
+  max-height: 60px; /* Ograničavamo visinu da budu ujednačeni */
+  object-fit: contain;
+  filter: grayscale(100%); /* Svi logotipi su sivi */
+  opacity: 0.6;
+  transition: all 0.4s ease;
+}
+
+/* Na hover logo dobija boju i postaje jasniji */
+.partner-logo:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Mobilna responzivnost */
+@media (max-width: 992px) {
+  .partners-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 kolone na tabletu */
+    gap: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolone na telefonu */
+    gap: 20px;
+  }
+  .partner-logo {
+    max-width: 80px;
+  }
+}
+/* Opciono: Da ikonice budu u boji i pre hover-a, samo skloni :hover iz koda iznad */
+
+.contact-section {
+  padding: 80px 0;
+  background: #f9f9f9;
+}
+
+.contact-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.map-container {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 4px solid white;
+  line-height: 0;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 450px;
+  display: block;
+  border: 0;
+}
+
+.contact-info-card {
+  background: #1a1a1a;
+  color: white;
+  padding: 40px;
+  border-radius: 12px;
+  height: 100%;
+}
+
+.contact-info-card h3 {
+  color: #e74c3c;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+}
+
+.contact-info-card p {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Responzivnost za mobilni */
+@media (max-width: 992px) {
+  .map-container iframe {
+    height: 350px;
+  }
+}
+
+/* =====================================================
+   GLOBALNA TEMA - zup\u010danici koji se ponavljaju
+   ===================================================== */
+
+/* Sekcije koje nose dekorativne zup\u010danike */
+.section-themed {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sadr\u017eaj uvek iznad zup\u010danika */
+.section-themed > .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Kontejner za dekorativne zup\u010danike */
+.section-gears {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.deco-gear {
+  position: absolute;
+  filter: grayscale(1) brightness(0.45);
+  opacity: 0.06;
+  will-change: transform;
+}
+
+.deco-gear-a {
+  width: 280px;
+  height: 280px;
+  top: -70px;
+  right: -70px;
+  animation: spin 30s linear infinite;
+}
+
+.deco-gear-b {
+  width: 190px;
+  height: 190px;
+  bottom: -55px;
+  left: -55px;
+  animation: spinRev 24s linear infinite;
+}
+
+/* Tamne sekcije (O nama, Kontakt) - usagla\u0161eno sa hero atmosferom */
+.section-dark {
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(231, 76, 60, 0.12),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 15% 85%,
+      rgba(36, 54, 199, 0.16),
+      transparent 55%
+    ),
+    linear-gradient(160deg, #1a1c20, #0e0f12);
+  color: #d3d6da;
+}
+
+.section-dark .section-title {
+  color: #ffffff;
+}
+
+.section-dark p {
+  color: #b9bdc4;
+}
+
+/* Na tamnim sekcijama zup\u010danici su svetliji da budu vidljivi */
+.section-dark .deco-gear {
+  filter: grayscale(1) brightness(2.4);
+  opacity: 0.1;
+}
+
+/* Suptilan crveno/plavi sjaj oko mape na tamnoj kontakt sekciji (boje logoa) */
+.section-dark .map-container {
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 12px 40px rgba(231, 76, 60, 0.22),
+    0 0 60px rgba(36, 54, 199, 0.18);
+}
+
+/* Na tamnoj partners/gallery ne primenjuje se, ali partner kartice na svetloj
+   ve\u0107 imaju stil. Galerija na tamnoj nije kori\u0161\u0107ena. */
+
+/* Animacije se gase kada korisnik to \u017eeli */
+@media (prefers-reduced-motion: reduce) {
+  .deco-gear {
+    animation: none !important;
+  }
+}
+
+/* Na manjim ekranima manji dekorativni zup\u010danici */
+@media (max-width: 768px) {
+  .deco-gear-a {
+    width: 180px;
+    height: 180px;
+  }
+  .deco-gear-b {
+    width: 130px;
+    height: 130px;
+  }
+}
+/* =====================================================
+   PRELOADER - auto koji ubrzava (loading screen)
+   ===================================================== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(231, 76, 60, 0.18),
+      transparent 55%
+    ),
+    linear-gradient(160deg, #1a1c20, #0e0f12);
+  opacity: 1;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s ease;
+}
+
+/* Fade-out na izlasku */
+.preloader-hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Pozadinski zupčanici (tema) */
+.preloader-gear {
+  position: absolute;
+  filter: grayscale(1) brightness(2.2);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+.pg-1 {
+  width: 320px;
+  height: 320px;
+  top: -90px;
+  right: -90px;
+  animation: spin 26s linear infinite;
+}
+
+.pg-2 {
+  width: 220px;
+  height: 220px;
+  bottom: -70px;
+  left: -70px;
+  animation: spinRev 20s linear infinite;
+}
+
+/* Scena sa autom */
+.preloader-stage {
+  position: relative;
+  width: 280px;
+  height: 130px;
+}
+
+/* Automobil */
+.loader-car {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  width: 220px;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 14px 16px rgba(0, 0, 0, 0.6));
+  animation: carShake 0.25s ease-in-out infinite;
+}
+
+/* Blago poskakivanje karoserije (vibracija motora) */
+@keyframes carShake {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-2px);
+  }
+}
+
+/* Rotacija točkova - ubrzava */
+.loader-wheel {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wheelSpin 0.9s linear infinite;
+}
+
+@keyframes wheelSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Put ispod auta */
+.loader-road {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 4px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    to right,
+    #e74c3c 0,
+    #e74c3c 18px,
+    transparent 18px,
+    transparent 36px
+  );
+  background-size: 36px 100%;
+  animation: roadMove 0.5s linear infinite;
+  opacity: 0.85;
+}
+
+@keyframes roadMove {
+  to {
+    background-position: -36px 0;
+  }
+}
+
+/* Brzinske linije iza auta */
+.speed-lines {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  pointer-events: none;
+}
+
+.speed-lines span {
+  position: absolute;
+  right: 55%;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(to left, rgba(231, 76, 60, 0.9), transparent);
+  animation: speedDash 0.7s linear infinite;
+}
+
+.speed-lines span:nth-child(1) {
+  top: 14px;
+  width: 60px;
+  animation-delay: 0s;
+}
+.speed-lines span:nth-child(2) {
+  top: 30px;
+  width: 90px;
+  animation-delay: 0.15s;
+}
+.speed-lines span:nth-child(3) {
+  top: 44px;
+  width: 50px;
+  animation-delay: 0.3s;
+}
+.speed-lines span:nth-child(4) {
+  top: 58px;
+  width: 80px;
+  animation-delay: 0.1s;
+}
+.speed-lines span:nth-child(5) {
+  top: 70px;
+  width: 65px;
+  animation-delay: 0.25s;
+}
+
+@keyframes speedDash {
+  0% {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-140px);
+    opacity: 0;
+  }
+}
+
+/* Brend tekst ispod */
+.preloader-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #e74c3c;
+  text-shadow: 0 0 25px rgba(231, 76, 60, 0.4);
+}
+
+.preloader-sub {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a9ea4;
+  animation: subPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes subPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Poštuj korisnike koji ne žele animacije */
+@media (prefers-reduced-motion: reduce) {
+  .loader-car,
+  .loader-wheel,
+  .loader-road,
+  .speed-lines span,
+  .preloader-gear,
+  .preloader-sub {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .preloader-brand {
+    font-size: 1.4rem;
+  }
+  .loader-car {
+    width: 180px;
+  }
+}
+
+/* =====================================================
+   UTISCI / RECENZIJE - kartice (Google recenzije)
+   ===================================================== */
+.reviews-section {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(36, 54, 199, 0.05), transparent 55%),
+    linear-gradient(180deg, #f4f6f8, #eaedf1);
+}
+
+/* Google badge sa ocenom */
+.reviews-google-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: -30px auto 50px;
+  padding: 12px 26px;
+  width: fit-content;
+  background: #fff;
+  border: 1px solid #e3e7ec;
+  border-radius: 50px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+}
+
+.rg-stars {
+  color: #fbbc05;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.rg-text {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.rg-text strong {
+  color: #1a1a1a;
+}
+
+/* Grid kartica */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* Pojedinačna kartica recenzije */
+.review-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+  overflow: hidden;
+}
+
+/* Crveno/plavi akcent na vrhu kartice (boje logoa) */
+.review-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand-red), var(--brand-blue));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.12);
+}
+
+.review-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Header kartice: avatar + ime + Google ikona */
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.review-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.review-meta {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.review-name {
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 1rem;
+}
+
+.review-date {
+  font-size: 0.82rem;
+  color: #8a9099;
+}
+
+.review-google-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.review-stars {
+  color: #fbbc05;
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.review-text {
+  color: #555;
+  line-height: 1.65;
+  font-size: 0.96rem;
+}
+
+/* Veliki navodnik u pozadini kartice */
+.review-card::after {
+  content: "\201D";
+  position: absolute;
+  bottom: -25px;
+  right: 10px;
+  font-size: 7rem;
+  line-height: 1;
+  font-family: Georgia, serif;
+  color: rgba(231, 76, 60, 0.06);
+  pointer-events: none;
+}
+
+/* CTA dugme ka Google recenzijama */
+.reviews-cta {
+  display: block;
+  width: fit-content;
+  margin: 50px auto 0;
+  padding: 14px 36px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, #ff5a4d, #c0392b);
+  border-radius: 10px;
+  box-shadow:
+    0 6px 0 #7c241b,
+    0 14px 26px rgba(231, 76, 60, 0.35);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.reviews-cta:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 9px 0 #7c241b,
+    0 20px 32px rgba(231, 76, 60, 0.45);
+}
+
+.reviews-cta:active {
+  transform: translateY(5px);
+  box-shadow:
+    0 1px 0 #7c241b,
+    0 5px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Responzivnost */
+@media (max-width: 992px) {
+  .reviews-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+  .reviews-google-badge {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+}
